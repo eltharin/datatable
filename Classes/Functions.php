@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugin/Datatable/Classes;
+namespace Plugin\Datatable\Classes;
 
 class Functions
 {

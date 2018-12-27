@@ -1,6 +1,6 @@
 {
-    "name": "eltharin/datatable",
-	"pluginName": "datatable",
+    "name": "eltharin/Datatable",
+	"pluginName": "Datatable",
     "description": "DataTable module",
     "keywords": ["Whookshii", "PHP", "Web", "Plugin"],
     "license": "GPL-3.0",
