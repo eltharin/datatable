@@ -1,0 +1,38 @@
+#export_button
+{
+    margin: 0px;
+    border-radius: 50px 0 0 50px;
+}
+
+#param_export
+{
+    width: 20px;
+    background-image: url(/pics/sort_desc.png);
+    margin: 0px;
+    border-radius: 0 50px 50px 0;
+    margin-left: 1px;
+}
+
+#export
+{
+    position: relative;
+    text-align: center;
+    display: block;
+}
+
+#block
+{
+    overflow: hidden;
+    position: absolute;
+    background-color: lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: -8%;
+    border: 2px solid black;
+    display: none;
+}
+
+@media all and (-ms-high-contrast:none)
+{
+    #block { margin-left: 42%;  }
+}
