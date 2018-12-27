@@ -1,0 +1,21 @@
+
+
+.dataTables_length{
+	width: 5%;
+	display: inline-block;
+	margin-top:15px;
+}
+
+.change_lengthOfPager{
+	border-radius: 8px;
+	margin: 0 10px;
+	padding: 2px 4px;
+	border: 1px solid #969696;
+	box-shadow: 2px 1px 0 0 #969696;
+	cursor:pointer;
+}
+
+.change_lengthOfPager:focus{
+	border: 1px solid #21c4e7;
+	box-shadow: 0 0 2px 0 #21c4e7;
+}
