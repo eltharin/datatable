@@ -1,6 +1,8 @@
 {
     "name": "eltharin/datatable",
-	"installer-name": "Datatable",
+	"extra": {
+        "installer-name": "Datatable"
+    },
     "description": "DataTable module",
     "keywords": ["Whookshii", "PHP", "Web", "Plugin"],
     "license": "GPL-3.0",
