@@ -127,7 +127,8 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 				$(oSettings.zfilter.cols).each(
 				function(index,value)
 				{
-					if(value !== null && value !== "" && value !== undefined)
+					//console.log(value)
+					if(value !== null && value !== "" && value !== undefined && value.length > 0)
 					{
 
 						if(settings.aoPreSearchCols[index].exactSearch)
@@ -218,6 +219,7 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 		var valvide= false;
 		var select = settings.zfilter.selects[i];
 		select.empty();
+				
 		column.data().map(settings.zfilter.convert_filter_data).unique().sort(Intl.Collator().compare).each( function ( d, j )
 		{
 			if(d !== null && d !== "" && d !== " ")
@@ -242,15 +244,20 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 
 	settings.zfilter.create_filters = function()
 	{
+		
 			var th = getRow(settings);
 			var thLen = th.length;
-
+			
 			for (var i = 0; i < thLen; i++)
 			{
-
 				if(th[i].hasClass('filter-select'))
 				{
+					select = settings.zfilter.selects[i];
+					var oldval = select.val();
+					
 				    settings.zfilter.get_data_select(i);
+					
+					
 					if(th[i].data('filter') !== undefined)
 					{
 						if(select.find('option[value='+th[i].data('filter')+']').length === 0)
@@ -258,8 +265,22 @@ $.fn.dataTable.ext.filter = function ( settings ) {
                             select.append('<option value="'+th[i].data('filter')+'">'+th[i].data('filter')+'</option>');
 						}
                         select.val(th[i].data('filter')).prop('selected', true);
+						
+
 						settings.zfilter.cols[i] = th[i].data('filter');
 						settings.oApi._fnReDraw(settings);
+					}
+					
+					if(settings.zfilter.multiselect)
+					{
+						select.attr('multiple','multiple');
+						select.val(oldval);
+						select.multipleSelect({
+							selectAll: true,
+							width: '100%',
+							filter:true,
+							dropWidth: 'auto'
+						});
 					}
 				}
 			}

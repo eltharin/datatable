@@ -143,17 +143,22 @@ $.fn.dataTableExt.oApi.fnLoadHTML = function ( oSettings,data)
 
 $.fn.dataTableExt.oApi.fnLoadJSON = function ( oSettings,data)
 {
-	try 
-	{ 
-		data = $.parseJSON(data); 
-	} 
-	catch(err)  
-	{ 
-		console.log(err);
-	}  
+	if(jQuery.type( data ) === "string")
+	{
+		try 
+		{ 
+			data = $.parseJSON(data); 
+		} 
+		catch(err)  
+		{ 
+			console.log(err);
+		}
+	}	
 	oSettings.oApi._fnClearTable(oSettings);
 	oSettings.oApi._fnAjaxUpdateDraw(oSettings,{data:data});
 	oSettings.oApi._fnReDraw(oSettings,true);
+
+	oSettings.zfilter.create_filters(oSettings);
 };
 
 $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
@@ -248,8 +253,14 @@ $.fn.dataTableExt.oApi.fnGetAllObject = function ( oSettings,formid,object)
 	});
 	return myobj;
 }
+
 $.fn.dataTableExt.oApi.fnGetObject = function ( oSettings)
 {
 	oSettings.oApi._fnLengthChange(oSettings,-1);
 	oSettings.oApi._fnReDraw(oSettings,true);
+}
+
+$.fn.dataTableExt.oApi.fnSetOption = function ( oSettings,settings)
+{
+	console.log(oSettings)
 }
