@@ -25,6 +25,7 @@
 		});
 		
 		output.header = header( settings );
+		
 		mydonne['header'] = output.header['name'];
 		mydonne['banned'] = output.header['banned'];
 		mydonne['data'] = body(settings, $rows, output.header['tab_col'], output.header['banned']);
@@ -220,7 +221,6 @@
 	body = function ( settings, $rows, tab_col, banned) {
 		var rowsLength = $rows.length;
 		var mydata = "[";
-
 		for (var rowIndex = 0; rowIndex < rowsLength; rowIndex++)
 		{
 			mydata += "[";
@@ -246,10 +246,17 @@
 							}
 							else
 							{
-								data = $rows[rowIndex]._aData[settings.aoColumns[i].data];
+								var data = $rows[rowIndex]._aData[settings.aoColumns[i].data];
 								if(settings.aoColumns[i].mRender !== null)
 								{
-									data = settings.aoColumns[i].mRender.display(data);
+									if(settings.aoColumns[i].mRender.display == undefined)
+									{
+										data = settings.aoColumns[i].mRender(data,'display',$rows[rowIndex]._aData);	
+									}
+									else
+									{
+										data = settings.aoColumns[i].mRender.display(data,'display',$rows[rowIndex]._aData);
+									}
 								}
 								mydata += '"' + data.toString().replace( /<([^>]*)>/g, "" )
 													.replace(/\"/g, '')
@@ -449,5 +456,3 @@
 		});
 	};
 })(window, document, jQuery);
-
-
