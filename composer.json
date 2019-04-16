@@ -7,6 +7,13 @@
     "keywords": ["Whookshii", "PHP", "Web", "Plugin"],
     "license": "GPL-3.0",
     "type": "whookshii-plugin",
+    "require": {
+		"phpoffice/phpspreadsheet": "*",
+        "tecnickcom/tcpdf": "*",
+        "setasign/fpdi-tcpdf": "*",
+        "setasign/fpdi": "*",
+        "phpmailer/phpmailer": "*"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
