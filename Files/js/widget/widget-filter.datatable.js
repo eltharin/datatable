@@ -91,20 +91,27 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 						var input = $('<input class="'+oClasse.iFilter+'" type="search">');
 					}
 
+					var timer;
+					
 					input.appendTo(myth).on( 'change keyup search', function () {
-						if($(this).val().match(/[\<\>\!\=]/g))
-						{
-							settings.zfilter.cols[$(this).parent().attr('idx')] = $(this).val();
-							settings.aoPreSearchCols[$(this).parent().attr('idx')].sSearch = "";
-						}
-						else
-						{
-							settings.zfilter.cols[$(this).parent().attr('idx')] = "";
-							settings.aoPreSearchCols[$(this).parent().attr('idx')].sSearch = $(this).val();
-							
-						}	
-						settings.oApi._fnReDraw(settings);	
-						settings.zfilter.redraw_filters(settings);						
+						var that = $(this);
+						
+						clearTimeout(timer);
+						timer = setTimeout(function() {
+							if($(that).val().match(/[\<\>\!\=]/g))
+							{
+								settings.zfilter.cols[that.parent().attr('idx')] = that.val();
+								settings.aoPreSearchCols[that.parent().attr('idx')].sSearch = "";
+							}
+							else
+							{
+								settings.zfilter.cols[that.parent().attr('idx')] = "";
+								settings.aoPreSearchCols[that.parent().attr('idx')].sSearch = that.val();
+								
+							}	
+							settings.oApi._fnReDraw(settings);	
+							settings.zfilter.redraw_filters(settings);
+						}, settings.searchDelay ? settings.searchDelay : 0);
 					});
 					if(input.val() !== '')
 					{

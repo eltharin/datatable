@@ -13,6 +13,8 @@ $.fn.dataTable.defaults.autoWidth = false;
 $.fn.dataTable.defaults.sDom = "tFipL";
 $.fn.dataTable.defaults.aaSorting = [];
 $.fn.dataTable.defaults.aoColumnDefs=tableRender;
+$.fn.dataTable.defaults.searchDelay=250;
+$.fn.dataTable.defaults.deferRender=true;
 
 
 
