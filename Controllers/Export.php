@@ -639,7 +639,7 @@ class Export extends \Core\App\Mvc\Controller
 			$titre = "tableau_excel";
 		}
 
-		\config::set_template(null);
+		\Core::$response->setWithTemplate(false);
 		\Core::$response->set_content_type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		\Core::$response->add_header('Content-Disposition: attachment;filename="' . $titre . '.xlsx"');
 		$objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objExcel, 'Xlsx');
