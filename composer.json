@@ -8,6 +8,7 @@
     "license": "GPL-3.0",
     "type": "whookshii-plugin",
     "require": {
+		"eltharin/multipleselect": "*",
 		"phpoffice/phpspreadsheet": "*",
         "tecnickcom/tcpdf": "*",
         "setasign/fpdi-tcpdf": "*",

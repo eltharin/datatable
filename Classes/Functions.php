@@ -11,8 +11,7 @@ class Functions
 		\Core::$config->HTMLtemplate->add_css('/datatable/css/pager.datatable.css');
 		\Core::$config->HTMLtemplate->add_css('/datatable/css/menuLength.datatable.css');
 		\Core::$config->HTMLtemplate->add_css('/datatable/css/output.datatable.css');
-		\Core::$config->HTMLtemplate->add_css('/datatable/css/multiple-select.css');
-
+		
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/core/jquery.dataTables.js'); 
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/renderers.datatable.js');
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/dataTable.basic.js'); 
@@ -24,6 +23,9 @@ class Functions
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/widget/widget-totalizer.datatable.js');
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/widget/widget-numColFooter.datatable.js');
 		\Core::$config->HTMLtemplate->add_script('/datatable/js/widget/widget-output.datatable.js'); 
-		\Core::$config->HTMLtemplate->add_script('/datatable/js/multiple-select.js');
+		
+		
+		\Core::$config->HTMLtemplate->add_css('/multipleselect/css/multiple-select.css');
+		\Core::$config->HTMLtemplate->add_script('/multipleselect/js/multiple-select.js');
 	}
 }
