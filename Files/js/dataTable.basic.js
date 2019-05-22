@@ -38,6 +38,11 @@ $(document).on( 'preInit.dt', function (e, oSettings)
 	{
 		oSettings.oFeatures.bSort = true;
 	}
+	else
+	{
+		oSettings.oFeatures.bSort = false;
+		$.fn.dataTable.defaults.ordering = false;
+	}
 
 	if($(oSettings.nTable).hasClass('dt-json'))
 	{
@@ -160,7 +165,10 @@ $.fn.dataTableExt.oApi.fnLoadJSON = function ( oSettings,data)
 	oSettings.oApi._fnAjaxUpdateDraw(oSettings,{data:data});
 	oSettings.oApi._fnReDraw(oSettings,true);
 
-	oSettings.zfilter.create_filters(oSettings);
+	if(oSettings.zfilter !== undefined)
+	{
+		oSettings.zfilter.create_filters(oSettings);
+	}
 };
 
 $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
