@@ -9,6 +9,8 @@ class Export extends \Core\App\Mvc\Controller
 		$colonne = json_decode($_POST['colonne'], true);
 		$footer = json_decode($_POST['footer'], true);
 		
+		
+		
 		ini_set('memory_limit', '-1');
 		set_time_limit(-1);
 		
@@ -22,11 +24,15 @@ class Export extends \Core\App\Mvc\Controller
 		rsort($banned);
 		
 		$rupture = (isset($_POST['rupture']) && $_POST['rupture']!=='')?$_POST['rupture']:null;
-		$colonne = $this->format_header($colonne, $banned);
 		
+		
+		$colonne = $this->getColonnesFictives($colonne);
+		$footer = $this->getColonnesFictives($footer);
+		$colonne = $this->format_header($colonne,$footer, $banned);
+
 		if ($type == "excel")
 		{
-			$this->xl($this->get_columns($colonne), $data, $titre, $param, $valeurs);
+			$this->xl($colonne, $data, $titre, $param, $valeurs);
 		}
 		else
 		{
@@ -36,7 +42,7 @@ class Export extends \Core\App\Mvc\Controller
 		}
 	}
 
-	function get_columns($tabcol)
+	function getColonnesFictives($tabcol)
 	{
 		$cols = [];
 		
@@ -56,6 +62,8 @@ class Export extends \Core\App\Mvc\Controller
 					{
 						$cols[$numrow+$j][$numcol+$i] = $r;
 						$cols[$numrow+$j][$numcol+$i]['fictif'] = 1;
+						$cols[$numrow+$j][$numcol+$i]['startline'] = $numrow;
+						$cols[$numrow+$j][$numcol+$i]['startcol'] = $numcol;
 					}
 				}
 				
@@ -95,104 +103,55 @@ class Export extends \Core\App\Mvc\Controller
 		
 	}
 	
-	function tab_size($colonne)
+	function tab_size(&$colonne,&$footer)
 	{
 		$tabsize = array();
-		$nb_tr = count(array_keys($colonne));
-		if ($nb_tr == 1)
+		
+		foreach (end($colonne) as $key => $value)
 		{
-			foreach ($colonne as $numcol => $case)
+			if (($value['showpdf'] !== 'no' && $value['display'] !== 'none'))
 			{
-				foreach ($case as $key => $value)
-				{
-					if (($value['showpdf'] !== 'no' && $value['display'] !== 'none'))
-					{
-						$tabsize[$key] = $value['taille'];
-					}
-					else
-					{
-						$tabsize[$key] = 0;
-					}
-				}
+				$tabsize[$key] = $value['taille'];
+			}
+			else
+			{
+				$tabsize[$key] = 0;
 			}
 		}
-		else
+
+		for($i=0;$i < count($colonne) -1 ;$i++)
 		{
-			$rowspan = array();
-			//-- calcul du tabsize
-			
-			foreach ($colonne as $numligne => $ligne)
+			foreach($colonne[$i] as $k => $case)
 			{
-				$colindex = 0;
-				
-				foreach ($ligne as $case)
-				{
-					if(isset($rowspan[$numligne][$colindex]))
+				//if(!isset($case['fictif']) || $case['fictif'] !== 1)
+				//{
+					$total = 0;
+					for($j=$k;$j<$k+$case['colspan'];$j++)
 					{
-						$colindex += $rowspan[$numligne][$colindex]['colspan'];
+						$total += $tabsize[$j]??0;
 					}
-					
-					if ($case['rowspan'] > 1)
-					{
-						
-						for($i=1;$i<$case['rowspan'];$i++)
-						{
-							$rowspan[$numligne+$i][$colindex] = $case;
-							$rowspan[$numligne+$i][$colindex]['rowspan'] = $case['rowspan']-$i;
-							$rowspan[$numligne+$i][$colindex]['fictif'] = 1;
-						}
-						
-					}
-					if (!isset($tabsize[$colindex]))
-					{
-						$tabsize[$colindex] = '-1';
-					}
-					if (($case['colspan'] == 1) && (isset($case['taille'])) && $case['taille'] != '' && ($tabsize[$colindex] == -1))
-					{
-						$tabsize[$colindex] = $case['taille'];
-					}
-					/*if (($case['showpdf'] == "no" || $case['display'] == 'none'))
-					{
-						$tabsize[$colindex] = 0;
-					}*/
-					$colindex += $case['colspan'];
-				}
-			}
-			
-			//-- calcul des colonnes
-			foreach ($colonne as $numligne => $ligne)
-			{
-				
-				if ($numligne > 0)
-				{
-					$colindex = 0;
-					$decalage_deja_fait = 0;
-					if(isset($rowspan[$numligne]))
-					{
-						foreach ($rowspan[$numligne] as $cle => $caserowspan)
-						{
-							$ligne = array_merge(array_slice($ligne, 0, $cle + $decalage_deja_fait), array($caserowspan), array_slice($ligne, $cle + $decalage_deja_fait));
-							$decalage_deja_fait += $caserowspan['colspan'] - 1;	
-						}
-					}
-					$colonne[$numligne] = $ligne;
-				}
-				
-				$idcol=0;
-				foreach($ligne as $numcol => $col)
-				{
-					if($col['taille'] == '')
-					{
-						$colonne[$numligne][$numcol]['taille'] = 0;
-						for($i=$idcol;$i<$idcol+$col['colspan'];$i++)
-						{
-							$colonne[$numligne][$numcol]['taille'] += $tabsize[$numcol];
-						}
-					}
-				}			
+					$colonne[$i][$k]['taille'] = $total;
+				//}
 			}
 		}
-		return [$colonne,$tabsize];
+
+		for($i=0;$i < count($footer);$i++)
+		{
+			foreach($footer[$i] as $k => $case)
+			{
+				//if(!isset($case['fictif']) || $case['fictif'] !== 1)
+				//{
+					$total = 0;
+					for($j=$k;$j<$k+$case['colspan'];$j++)
+					{
+						$total += $tabsize[$j]??0;
+					}
+					$footer[$i][$k]['taille'] = $total;
+				//}
+			}
+		}
+
+		return $tabsize;
 	}
 
 	function pdf($colonne, $data, $titre, $param,  $orientation, $type_taille, $valeurs, $footer, $rupture=null)
@@ -221,8 +180,8 @@ class Export extends \Core\App\Mvc\Controller
 
 			$pdf->set_vars('rupture', $rupture);
 			$nb_tr = count(array_keys($colonne));
-			list($colonne,$tabsize) = $this->tab_size($colonne);
-			
+			$tabsize = $this->tab_size($colonne,$footer);
+
 			$pdf->set_vars('nb_tr', $nb_tr);
 			$pdf->set_vars('colonne', $colonne);
 			$pdf->set_vars('param', $param);
@@ -359,6 +318,7 @@ class Export extends \Core\App\Mvc\Controller
 					
 					foreach ($ligne as $numcase => $case)
 					{
+						$case = str_replace("\xe2\x80\xaf", ' ', $case);
 						if ($tabsize[$numcase] > 0)
 						{
 							if ($nb_tr == 1)
@@ -369,13 +329,13 @@ class Export extends \Core\App\Mvc\Controller
 									if($keydefou == 0)
 									{
 										$xdefou = $pdf->GetX();
-										$pdf->Cell($tabsize[$i] + $m, $max_height*$height, str_replace(' ¤ ', ' ', str_replace('<hr>', '',  $valdefou)), 1, 0, $colonne[0][$i]['align'], false, '', 1, true, '', 'T');
+										$pdf->Cell($tabsize[$i] + $m, $max_height*$height, str_replace('=', ' ', str_replace('<hr>', '',  $valdefou)), 1, 0, $colonne[0][$i]['align'], false, '', 1, true, '', 'T');
 										$ydefou = $pdf->GetY();
 									}
 									else
 									{
 										$pdf->setX($xdefou);
-										$pdf->Cell($tabsize[$i] + $m, $height, str_replace(' ¤ ', ' ', str_replace('<hr>', '',  $valdefou)), 0, 0, $colonne[0][$i]['align'], false, '', 1, true, '', 'T');
+										$pdf->Cell($tabsize[$i] + $m, $height, str_replace('=', ' ', str_replace('<hr>', '',  $valdefou)), 0, 0, $colonne[0][$i]['align'], false, '', 1, true, '', 'T');
 									}
 									$pdf->ln($height);
 								}
@@ -394,29 +354,18 @@ class Export extends \Core\App\Mvc\Controller
 				}
 			}
 			$pdf->setFillColor(180, 200, 250);
+
 			foreach ($footer as $f)
 			{
 				$i=0;
 				foreach($f as $case)
 				{
-					if($case['colspan'] > 1)
+					if(!isset($case['fictif']) || $case['fictif'] != 1)
 					{
-						$taillecol = 0;
-						for($j=$i; $j < $i+$case['colspan']; $j++)
-						{
-							$taillecol += $tabsize[$j];
-						}
-						$taillecol += $case['colspan'] * $m;
-						$i += $case['colspan']-1;
+						$case['value'] = str_replace("\xe2\x80\xaf", ' ', $case['value']);
+						$pdf->Cell($case['taille'] + $m * $case['colspan'], $height, $case['value'], 1, 0, 'C', 1, '', 1);
 					}
-					else
-					{
-						$taillecol = $tabsize[$i] + $m;
-					}
-					if(end($colonne)[$i]['showpdf'] != 'no')
-					{
-						$pdf->Cell($taillecol, $height, $case['value'], 1, 0, 'C', 1, '', 1);
-					}
+
 					$i++;
 				}
 				$pdf->Cell(1, $max_height*$height, '', 0, 1);
@@ -467,31 +416,17 @@ class Export extends \Core\App\Mvc\Controller
 			}
 		}
 		
-		foreach ($colonne as $c)
+		foreach ($colonne as $ligne => $c)
 		{
 			foreach ($c as $k => $v)
 			{
-				$taillecol = ($c[$k]['taille'] + ($m) * $c[$k]['colspan']);
-				if ($nb_tr == 1)
+				if (!isset($v['fictif']) || $v['fictif'] != 1)
 				{
-					if ($v['showpdf'] != 'no' && $v['display'] != 'none')
-					{
-						$pdf->Multicell($taillecol, $heightheader, $v['name'], 1, 'C', true, 0, '', '', 1, 0, 0, 1, 11, 'M');
-					}
+					$pdf->Multicell($c[$k]['taille'] + ($m) * $c[$k]['colspan'], $heightheader * $c[$k]['rowspan'], $c[$k]['name'], 1, 'C', true, 0, '', '', 1, 0, 0, 1, 11, 'M');
 				}
-				else
+				elseif($v['startline'] !== $ligne && $v['startcol'] === $k)
 				{
-					if (!array_key_exists('fictif', $v) && isset($c[$k]['colspan']) && ($v['showpdf'] != 'no' && $v['display'] != 'none'))
-					{
-						$pdf->Multicell($taillecol, $heightheader * $c[$k]['rowspan'], $c[$k]['name'], 1, 'C', true, 0, '', '', 1, 0, 0, 1, 11, 'M');
-					}
-					else
-					{
-						if (isset($c[$k]['colspan']) && ($v['showpdf'] != 'no' && $v['display'] != 'none'))
-						{
-							$pdf->Multicell($taillecol, $heightheader, '', 0, 'C', false, 0, '', '', 1, 0, 0, 1, 11, 'M');
-						}
-					}
+					$pdf->Multicell($colonne[$v['startline']][$v['startcol']]['taille'] + ($m) * $colonne[$v['startline']][$v['startcol']]['colspan'], $heightheader, '', 0, 'C', false, 0, '', '', 1, 0, 0, 1, 11, 'M');
 				}
 			}
 			$pdf->ln($heightheader);
@@ -646,60 +581,62 @@ class Export extends \Core\App\Mvc\Controller
 		$objWriter->save('php://output');
 	}
 
-	private function format_header($header, $aSuppr)
+	private function format_header($header,&$footer, $aSuppr)
 	{
-		/*Mise en forme des headers non filtrables*/
-        $NbLineheader = count($header);
-		$nbLineHNonModifiable = $NbLineheader-2;
-		
-		if((!empty($aSuppr)) && ($nbLineHNonModifiable>=0))
+		foreach($aSuppr as $colSuppr)
 		{
-			for($i=$nbLineHNonModifiable; $i>=0; $i--)	// pour chaque header excepté le dernier qui a les données
+			for($i=0;$i<count($header);$i++)
 			{
-				//on initialise le tableau qui va stocker le nb de colspan a supprimer
-				for($k=$nbLineHNonModifiable; $k>=0; $k--)
+				if(isset($header[$i][$colSuppr]))
 				{
-					$countCell = count($header[$k])-1;
-					for($j=0; $j<=$countCell; $j++)		
+					if(!isset($header[$i][$colSuppr]['fictif']) || $header[$i][$colSuppr]['fictif'] !== 1)
 					{
-						$colSuppr[$j] = 0;
+						if($header[$i][$colSuppr]['colspan'] > 1)
+						{
+							$header[$i][$colSuppr+1]['fictif'] = '';
+							$header[$i][$colSuppr+1]['colspan'] -= 1;
+						}
 					}
+					elseif($i == $header[$i][$colSuppr]['startline'])
+					{
+						$header[$i][$header[$i][$colSuppr]['startcol']]['colspan'] -= 1;
+					}
+					
+					unset($header[$i][$colSuppr]);
 				}
-			
-				$countCell = count($header[$i])-1;	//nb cellule dans le header[$i]
-				foreach($aSuppr as $suppr)
+			}
+			for($i=0;$i<count($footer);$i++)
+			{
+				if(isset($footer[$i][$colSuppr]))
 				{
-					if($countCell >= 0)
+					if(!isset($footer[$i][$colSuppr]['fictif']) || $footer[$i][$colSuppr]['fictif'] !== 1)
 					{
-						for($z=$countCell; $z>0; $z--)
+						if($footer[$i][$colSuppr]['colspan'] > 1)
 						{
-							if(($this->addition($header[$i], $z-1) < $suppr+1) && ($suppr+1 <= $this->addition($header[$i], $z)))
-							{
-								$colSuppr[$z]++;
-							}
-						}
-						if($suppr+1 <= $this->addition($header[$i], 0))
-						{
-							$colSuppr[0]++;
+							$footer[$i][$colSuppr+1]['fictif'] = '';
+							$footer[$i][$colSuppr+1]['colspan'] -= 1;
 						}
 					}
-				}
-				
-				//on reduit-supprime les colonnes
-				$nbColSuppr = count($colSuppr)-1;
-				for($j=$nbColSuppr; $j>=0; $j--)
-				{
-					if(isset($header[$i][$j]))
+					elseif($i == $footer[$i][$colSuppr]['startline'])
 					{
-						$header[$i][$j]['colspan']-=$colSuppr[$j];
-						if($header[$i][$j]['colspan'] == 0)
-						{
-							array_splice($header[$i], $j, 1);
-						}
+						$footer[$i][$footer[$i][$colSuppr]['startcol']]['colspan'] -= 1;
 					}
+					
+					unset($footer[$i][$colSuppr]);
 				}
 			}
 		}
+		
+		foreach($header as $k => $h)
+		{
+			$header[$k] = array_values($h);
+		}
+
+		foreach($footer as $k => $h)
+		{
+			$footer[$k] = array_values($h);
+		}
+
 		return $header;
 	}
 	

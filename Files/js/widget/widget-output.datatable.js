@@ -83,18 +83,21 @@
 		var banned = [];
 		var name = '[';
 		
+		$(settings.aoColumns).each(function () {
+			if(this.print === "no")
+			{
+				banned.push(this.idx);
+			}
+		});			
+				
 		oThead.children('tr').each(function () {
 			
 			if(!$(this).hasClass('dataTable-research')) {
-					
+				
+				
 				$(this).find('th').each(function () {
-					if($(this).data("print") === "no")
-					{
-						banned.push(this.cellIndex);
-					}
-					
-					if($(this).data("print") !== "no")
-					{
+										
+				
 			
 						if($(this).attr('colspan') > 1) {
 
@@ -204,13 +207,15 @@
 						}
 
 						name += '{\"name\":\"' + $(this).text() + '\",\"type\":\"' + type + '\",\"showpdf\":\"' + showpdf + '\",\"taille\":\"' + taille + '\",\"colspan\":\"' + colspan + '\",\"rowspan\":\"' + rowspan + '\",\"align\":\"' + align + '\",\"display\":\"' + display + '\",\"format\":\"' + format + '\"},';
-					}
+					
 				});
 				
 					name = name.substr(0, (name.length - 1)) + "],[";
 			}
 		});
 		name = "[" + name.substr(0, (name.length - 2)) + "]";
+
+console.log(tab_col);
 
 		dataheader['banned'] = banned;
 		dataheader['name'] = name;
