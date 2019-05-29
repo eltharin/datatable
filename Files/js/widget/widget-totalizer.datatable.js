@@ -12,44 +12,43 @@
 		rows = settings.aoData;
 		len = $(rows).length;
 		
+		console.log('totaliser');
+		
+		
 		$(settings.columnArray).each(function(indice, data)
+		{
+			if(columnResult[data.num] === undefined)
 			{
-				if(columnResult[data.num] === undefined)
-				{
-					columnResult[data.num] = {};
-					columnResult[data.num]['global'] = {value : 0, nb: 0};
-					columnResult[data.num]['view'] = {value : 0, nb: 0};
-					columnResult[data.num]['filter'] = {value : 0, nb: 0};
-					columnResult[data.num]['bord'] = {max : 0, min: 0};
-				}
-				
-				$(settings.aiDisplay).each(function(ind, d)
-				{
-					columnResult[data.num]['filter'].nb++;
-					if(!isNaN(parseFloat(rows[d]._aData[data.nom])))
-					{
-						columnResult[data.num]['filter'].value += parseFloat(rows[d]._aData[data.nom]);
-					}
-				});
-			});
+				columnResult[data.num] = {};
+				columnResult[data.num]['global'] = {value : 0, nb: len};
+				columnResult[data.num]['view'] = {value : 0, nb: settings._iDisplayLength };
+				columnResult[data.num]['filter'] = {value : 0, nb: settings.aiDisplay.length};
+				columnResult[data.num]['bord'] = {max : 0, min: 0};
+			}
+		});
+		
+
 
 			for(i=0; i< len; i++)
 			{
+				var view = (i >= settings._iDisplayStart) && (i < settings._iDisplayStart + settings._iDisplayLength );
+				var filter = ($.inArray( i, settings.aiDisplay) != -1);
+				
 				$(settings.columnArray).each(function(indice, data)
 				{
-					if(rows[i].nTr.isConnected)
-					{
-						columnResult[data.num]['view'].nb++;
-					}
-
-					columnResult[data.num]['global'].nb++;
 					if(!isNaN(parseFloat(rows[i]._aData[data.nom])))
 					{
-						if(rows[i].nTr.isConnected)
+						if(view)
 						{
 							columnResult[data.num]['view'].value += parseFloat(rows[i]._aData[data.nom]);
 						}
+						if(filter)
+						{
+							columnResult[data.num]['filter'].value += parseFloat(rows[i]._aData[data.nom]);
+						}
+						
 						columnResult[data.num]['global'].value += parseFloat(rows[i]._aData[data.nom]);
+						
 						if(parseFloat(rows[i]._aData[data.nom]) > columnResult[data.num]['bord'].max)
 						{
 							columnResult[data.num]['bord'].max = parseFloat(rows[i]._aData[data.nom]);
