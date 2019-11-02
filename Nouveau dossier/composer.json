@@ -1,0 +1,20 @@
+{
+    "name": "eltharin/datatable",
+	"extra": {
+        "installer-name": "Datatable"
+    },
+    "description": "DataTable module",
+    "keywords": ["Whookshii", "PHP", "Web", "Plugin"],
+    "license": "GPL-3.0",
+    "type": "whookshii-plugin",
+    "require": {
+		"eltharin/multipleselect": "*",
+		"phpoffice/phpspreadsheet": "*",
+        "tecnickcom/tcpdf": "*",
+        "setasign/fpdi-tcpdf": "*",
+        "setasign/fpdi": "*",
+        "phpmailer/phpmailer": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
