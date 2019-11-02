@@ -98,7 +98,7 @@ class Export extends \Core\App\Mvc\Controller
 					echo BRN;
 				}
 			}
-			\HTTP::error_page(500,'data incorrectes');
+			\HTTP::errorPage(500,'data incorrectes');
 		}
 		
 	}
@@ -160,7 +160,7 @@ class Export extends \Core\App\Mvc\Controller
 		{
 			ini_set('memory_limit', '-1');
 			set_time_limit(-1);
-			$pdf = new \pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$pdf = new \Core\Classes\Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 			$pdf->set_vars('titre', $titre);
 
 			$pdf->SetHeaderData();
@@ -574,9 +574,10 @@ class Export extends \Core\App\Mvc\Controller
 			$titre = "tableau_excel";
 		}
 
-		\Core::$response->setWithTemplate(false);
-		\Core::$response->set_content_type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		\Core::$response->add_header('Content-Disposition: attachment;filename="' . $titre . '.xlsx"');
+		\Config::get('HTMLTemplate')->setNoTemplate(true);
+		\Config::get('Response')->addHeader('Content-disposition','attachment; filename="' . $titre . '.xlsx"');
+		\Config::get('Response')->addHeader('Content-type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		
 		$objWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objExcel, 'Xlsx');
 		$objWriter->save('php://output');
 	}
