@@ -338,7 +338,7 @@ console.log(tab_col);
 
 		var dom_table = $(settings.aanFeatures.t);
 		tId = dom_table.attr('id');
-		dom_table.before('<form method="POST" action= "/datatable_export/export" id="form_output" ENCTYPE="multipart/form-data">'+
+		dom_table.before('<form method="POST" action= "/datatable_export/export" id="form_output">'+
 							'<input type=hidden id="'+tId+'_colonne" name="colonne" value = "" >'+
 							'<input type=hidden id="'+tId+'_data" name="data" value = "" >'+
 							'<input type=hidden id="'+tId+'_footer" name="footer" value = "" >'+
