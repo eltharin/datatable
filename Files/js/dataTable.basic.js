@@ -116,10 +116,9 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort,
 	{
 		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	},
-	"montant-pre": function ( date ) 
+	"montant-pre": function ( a ) 
 	{
-		
-		return ('0000-00-00 00:00:00');
+		return a;
 	},
 	"montant-asc": function ( a, b ) 
 	{

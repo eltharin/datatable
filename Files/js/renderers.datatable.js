@@ -50,6 +50,9 @@ jQuery.fn.dataTable.render["montant"] = function() {
 				}
 				return ret;
 			}
+		},
+		export: function(d){
+			return d;
 		}
 	};
 };

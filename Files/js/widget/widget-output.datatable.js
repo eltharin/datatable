@@ -215,7 +215,6 @@
 		});
 		name = "[" + name.substr(0, (name.length - 2)) + "]";
 
-console.log(tab_col);
 
 		dataheader['banned'] = banned;
 		dataheader['name'] = name;
@@ -252,15 +251,20 @@ console.log(tab_col);
 							else
 							{
 								var data = $rows[rowIndex]._aData[settings.aoColumns[i].data];
+								
 								if(settings.aoColumns[i].mRender !== null)
 								{
-									if(settings.aoColumns[i].mRender.display == undefined)
+									if(settings.aoColumns[i].mRender.export !== undefined)
 									{
-										data = settings.aoColumns[i].mRender(data,'display',$rows[rowIndex]._aData);	
+										data = settings.aoColumns[i].mRender.export(data,'export',$rows[rowIndex]._aData);
+									}
+									else if(settings.aoColumns[i].mRender.display !== undefined)
+									{
+										data = settings.aoColumns[i].mRender.display(data,'display',$rows[rowIndex]._aData);
 									}
 									else
 									{
-										data = settings.aoColumns[i].mRender.display(data,'display',$rows[rowIndex]._aData);
+										data = settings.aoColumns[i].mRender(data,'display',$rows[rowIndex]._aData);	
 									}
 								}
 								mydata += '"' + data.toString().replace( /<([^>]*)>/g, "" )
@@ -297,8 +301,17 @@ console.log(tab_col);
                     if(allow) {
                         var data = $rows[rowIndex]._aData[i];
 
-                        if (settings.aoColumns[i].mRender !== null) {
-                            data = settings.aoColumns[i].mRender.display(data);
+                        if (settings.aoColumns[i].mRender !== null) 
+						{
+							if(settings.aoColumns[i].mRender.export !== undefined)
+							{
+								data = settings.aoColumns[i].mRender.export(data);
+							}
+							else if(settings.aoColumns[i].mRender.display !== undefined)
+							{
+								data = settings.aoColumns[i].mRender.display(data);
+							}
+                            
                         }
                         mydata += '"' + data.toString().replace(/<([^>]*)>/g, "")
 													   .replace(/\"/g, '')
