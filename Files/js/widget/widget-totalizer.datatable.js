@@ -94,7 +94,15 @@
 				{
 					if(settings.aoColumns[$(this).data('numCol')].mRender !== null)
 					{
-						$(this).html(settings.aoColumns[$(this).data('numCol')].mRender.display(valsum));
+						if(settings.aoColumns[$(this).data('numCol')].mRender.display !== undefined)
+						{
+							$(this).html(settings.aoColumns[$(this).data('numCol')].mRender.display(valsum));
+						}
+						else
+						{
+							$(this).html(settings.aoColumns[$(this).data('numCol')].mRender(valsum,'display',[]));
+						}
+									
 					}
 					else
 					{
