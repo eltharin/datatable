@@ -30,30 +30,32 @@ jQuery.fn.dataTable.render["comptaDC"] = function() {
 };
 
 jQuery.fn.dataTable.render["montant"] = function() {
-	return {
-		display: function ( d ) {
-			if(d == '')
+	return function ( data, type, row ) {
+		if(type == 'display')
+		{
+			if(data == '')
 			{
 				return '';
 			}
-			else 
-			{
-				ret = parseFloat(d).toLocaleString('fr-FR');
+			
+			ret = parseFloat(data).toLocaleString('fr-FR');
 				
-				if(ret.search(",") === -1)
-				{
-					ret = ret + ',00';
-				}
-				else if(ret.search(",") >= ret.length-2)
-				{
-					ret = ret + '0';
-				}
-				return ret;
+			if(ret.search(",") === -1)
+			{
+				ret = ret + ',00';
 			}
-		},
-		export: function(d){
-			return d;
+			else if(ret.search(",") >= ret.length-2)
+			{
+				ret = ret + '0';
+			}
+			return ret;
 		}
+		if(type == 'sort' && data == '')
+		{
+			return -0.0000000001;
+		}
+		
+		return parseFloat(data);
 	};
 };
 
@@ -83,9 +85,28 @@ jQuery.fn.dataTable.render["%2"] = function() {
 };
 
 jQuery.fn.dataTable.render["integer"] = function() {
+	return function ( data, type, row ) {
+		if(type == 'display')
+		{
+			if(data == '')
+			{
+				return '';
+			}
+			
+			ret = parseInt(data).toLocaleString('fr-FR');
+
+			return ret;
+		}
+		if(type == 'sort' && data == '')
+		{
+			return -0.0000000001;
+		}
+		
+		return parseInt(data);
+	};
+	
 	return {
 		display: function ( d ) {
-			
 			return isNaN(parseInt(d)) ? "" : parseInt(d).toLocaleString('fr-FR');
 			
 
