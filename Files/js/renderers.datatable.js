@@ -50,12 +50,15 @@ jQuery.fn.dataTable.render["montant"] = function() {
 			}
 			return ret;
 		}
-		if(type == 'sort' && data == '')
+		if(type == 'sort')
 		{
-			return -0.0000000001;
+			if(data == '')
+			{
+				return -0.0000000001;
+			}
+			return parseFloat(data);	
 		}
-		
-		return parseFloat(data);
+		return data;
 	};
 };
 
@@ -97,20 +100,15 @@ jQuery.fn.dataTable.render["integer"] = function() {
 
 			return ret;
 		}
-		if(type == 'sort' && data == '')
+		if(type == 'sort')
 		{
-			return -0.0000000001;
+			if(data == '')
+			{
+				return -0.0000000001;
+			}
+			return parseInt(data);	
 		}
-		
-		return parseInt(data);
-	};
-	
-	return {
-		display: function ( d ) {
-			return isNaN(parseInt(d)) ? "" : parseInt(d).toLocaleString('fr-FR');
-			
-
-		}
+		return data;
 	};
 };
 
