@@ -360,7 +360,7 @@
 							'<input type=hidden id="'+tId+'_banned" name="banned" value = "" >'+
 							'<input type=hidden id="'+tId+'_type" name="type" value = "" >'+
 							'<input type="submit" id="export_button" value="Export xl" class="bouton_bleu">'+
-							'<input type="button" id="param_export" class="bouton_bleu">'+
+							'<input type="button" id="param_export" value=" " class="bouton_bleu">'+
 							'<div id="export">'+
 							'<div id="block">'+
 							'<div id="choix">'+
