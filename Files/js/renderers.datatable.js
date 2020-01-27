@@ -124,5 +124,24 @@ jQuery.fn.dataTable.render["html"] = function() {
 };
 
 
+jQuery.fn.dataTable.render["check"] = function() {
+	return function ( data , type, row )
+    {
+        if(type=='display')
+        {
+            if (data == '0')
+            {
+                return '<td class="center"><img title="0" src="/intranet/pics/icons/red_cross.png"/></td>';
+            }
+            else if(data == '1')
+            {
+                return '<td class="center"><img title="1" src="/intranet/pics/icons/check.png"/></td>';
+            }
+        }
+        return data;
+    }
+};
+	
+
 
 var tableRender = [];
