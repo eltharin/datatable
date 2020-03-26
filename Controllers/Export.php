@@ -550,7 +550,7 @@ class Export extends \Core\App\Mvc\Controller
                         {
                             if ($header[count($header) - 1][$k]['format'] == "text")
                             {
-                                $worksheet->setCellValueExplicit(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col+1) . $ligne,  str_replace('<br>', '', str_replace('<br><hr>', RN,$v)), \PhpOffice\PhpSpreadsheet\Cell\DataType :: TYPE_STRING);
+                                $worksheet->setCellValueExplicit(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col+1) . $ligne, str_replace('<br>', '', str_replace('<br><hr>', RN,str_replace('</br>', RN, $v))), \PhpOffice\PhpSpreadsheet\Cell\DataType :: TYPE_STRING);
                             }
                             elseif ($header[count($header) - 1][$k]['format'] == "nb")
                             {
@@ -558,7 +558,7 @@ class Export extends \Core\App\Mvc\Controller
                             }
                             else
                             {
-                                $worksheet->setCellValueExplicit(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col+1) . $ligne,  str_replace('<br>', '', str_replace('<br><hr>', RN,$v)), \PhpOffice\PhpSpreadsheet\Cell\DataType :: TYPE_STRING);
+                                $worksheet->setCellValueExplicit(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col+1) . $ligne, str_replace('<br>', '', str_replace('<br><hr>', RN,str_replace('</br>', RN, $v))), \PhpOffice\PhpSpreadsheet\Cell\DataType :: TYPE_STRING);
                             }
                             $col++;
                         }
