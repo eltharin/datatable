@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ var datatablesSettingsArray = [];
+ 
 (function(window, document, $, undefined) {
 	
 	$.fn.dataTable.ext.output = function ( oSettings ) {
 		var settings = oSettings;
 		settings.output = [];
-
 		
 		active_output( settings );
 	};
@@ -351,45 +352,55 @@
 
 		var dom_table = $(settings.aanFeatures.t);
 		tId = dom_table.attr('id');
-		dom_table.before('<form method="POST" action= "/datatable_export/export" id="form_output">'+
-							'<input type=hidden id="'+tId+'_colonne" name="colonne" value = "" >'+
-							'<input type=hidden id="'+tId+'_data" name="data" value = "" >'+
-							'<input type=hidden id="'+tId+'_footer" name="footer" value = "" >'+
-							'<input type=hidden id="'+tId+'_param" name="param" value = "" >'+
-							'<input type=hidden id="'+tId+'_titre" name="titre" value = "" >'+
-							'<input type=hidden id="'+tId+'_banned" name="banned" value = "" >'+
-							'<input type=hidden id="'+tId+'_type" name="type" value = "" >'+
-							'<input type="submit" id="export_button" value="Export xl" class="bouton_bleu">'+
-							'<input type="button" id="param_export" value=" " class="bouton_bleu">'+
-							'<div id="export">'+
-							'<div id="block">'+
-							'<div id="choix">'+
-							'<input type="radio" class="form_export" name="type_exp"  value="xl" checked> Excel'+
-							'<input type="radio" class="form_export" name="type_exp" value="pdf"> Pdf'+
-							'<hr></div>'+
+		
+		datatablesSettingsArray[dom_table.attr('id')] = settings;
+		
+		$(dom_table).closest('.dataTables_wrapper').children('.datatable_flex').children('.datatable_button').append('<form method="POST" action="/datatable_export/export" class="datatable_export_form_output">'+
+				'<input type=hidden name="colonne" value = "" >'+
+				'<input type=hidden name="data" value = "" >'+
+				'<input type=hidden name="footer" value = "" >'+
+				'<input type=hidden name="param" value = "" >'+
+				'<input type=hidden name="titre" value = "" >'+
+				'<input type=hidden name="banned" value = "" >'+
+				'<input type=hidden name="type" value = "" >'+
+				'<input type="button" value="Export XL" class="datatable_export_button" data-forid="'+tId+'">'+
+				'<input type="button" value=" " class="datatable_export_showparam">'+
+				'<div class="datatable_export_parampage">'+
+					'<div class="datatable_export_parampagecontent">'+
+						'<div>'+
+							'<input type="radio" class="datatable_export_choix" name="type_exp" value="XL" checked> Excel'+
+							'<input type="radio" class="datatable_export_choix" name="type_exp" value="PDF"> Pdf'+
+							'<hr>'+
+						'</div>'+
 
-							'Prendre les valeurs nulles : '+
-							'<input type="radio" name="valeurs" value="1" checked> Oui'+
-							'<input type="radio" name="valeurs" value="0"> Non<br><hr>'+
-							'<div id="xl" style="display:none;">'+
-							'</div>'+
-							'<div id="pdf" style="display:none;">'+
+						'Prendre les valeurs nulles : '+
+						'<input type="radio" name="valeurs" value="1" checked> Oui'+
+						'<input type="radio" name="valeurs" value="0"> Non<br><hr>'+
+											
+						'<div class="datatable_export_paramexport_xl" style="display:none;">'+
+						'</div>'+
+											
+						'<div class="datatable_export_paramexport_pdf" style="display:none;">'+
 							'Parametrage : '+
-							'<input type="radio" class="parametrage" name="param" value="auto" checked> auto'+
-							'<input type="radio" class="parametrage" name="param" value="mano"> manuel <br>'+
+							'<input type="radio" class="datatable_export_exportpdf_parametrage" name="param" value="auto" checked> auto'+
+							'<input type="radio" class="datatable_export_exportpdf_parametrage" name="param" value="mano"> manuel <br>'+
+									
 							'Orientation : '+
-							'<input type="radio" name="orientation" class="disabler" value="L" checked disabled> paysage'+
-							'<input type="radio" name="orientation" class="disabler" value="P" disabled> portrait <br>'+
+							'<input type="radio" name="orientation" class="datatable_export_exportpdf_disabler" value="L" checked disabled> paysage'+
+							'<input type="radio" name="orientation" class="datatable_export_exportpdf_disabler" value="P" disabled> portrait <br>'+
+							
 							'Type taille : '+
-							'<input type="radio" name="type_taille" class="disabler" value="A4" checked disabled> A4'+
-							'<input type="radio" name="type_taille" class="disabler" value="A3" disabled> A3<br>'+
+							'<input type="radio" name="type_taille" class="datatable_export_exportpdf_disabler" value="A4" checked disabled> A4'+
+							'<input type="radio" name="type_taille" class="datatable_export_exportpdf_disabler" value="A3" disabled> A3<br>'+
+							
 							'Rupture :' +
-							'<select name="rupture" id="rupture">' +
+							'<select name="rupture">' +
 								'<option selected></option>'+
-								
 							'</select>' +
-							'</div></div>'+
-							'</form>');
+						'</div>' + 
+					'</div>' + 
+				'</div>'+
+			'</form>');
 					
 		var valRup = 0;
 		$(settings.aoColumns).each(function ()
@@ -399,78 +410,107 @@
 
 			if(colonne_regex.test(colonne))
 			{
-				$('#rupture').append('<option value='+valRup+'>'+this.sTitle+'</option>');
+				$(dom_table).closest('.dataTables_wrapper').find('select[name=rupture]').append('<option value='+valRup+'>'+this.sTitle+'</option>');
 				valRup++;
-			}
-		});
-
-		var title = dom_table.attr('pdf_title');
-		var param = dom_table.attr('pdf_param');
-
-		if (title === 'undefined'){title = '';}
-		if (param === 'undefined'){param = '';}
-
-
-		$(document).on('click', function (e)
-		{
-			if($("#param_export").is(e.target) && $('#block').css('display') === 'none')
-			{
-				$('#block').css('display', 'inline-block');
-			}
-			else if((!$("#block").is(e.target)  && $("#block").has(e.target).length === 0 )
-				   ||($('#block').css('display') === 'block' && $("#param_export").is(e.target))
-				   ||(!$("#block").is(e.target) && $("#block").has(e.target).length === 0  && !$("#param_export").is(e.target)))
-			{
-				$('#block').hide();
-			}
-		});
-
-		$(document).on('click', '.parametrage', function ()
-		{
-			if($(this).val()==="mano")
-			{
-				$('.disabler').prop('disabled', false);
-
-			}
-			else
-			{
-				$('.disabler').prop("disabled", true);
-			}
-		});
-
-		$(document).on('click', '.form_export', function ()
-		{
-			$('#xl').hide();
-			$('#pdf').hide();
-			$('#'+$(this).val()).show();
-			$('#export_button').val('Export ' + $(this).val());
-		});
-
-		$(document).on('click', '#export_button', function (e)
-		{
-			mydonnee = setup(settings);
-			if(mydonnee['data'].length > 0)
-			{
-				$("#"+tId+"_data").attr("value", mydonnee['data']);
-				$("#"+tId+"_colonne").attr("value",mydonnee['header']);
-				$("#"+tId+"_footer").attr("value",mydonnee['footer']);
-				$("#"+tId+"_banned").attr("value",mydonnee['banned']);
-				$("#"+tId+"_titre").attr("value",title);
-				$("#"+tId+"_param").attr("value",param);
-				if($('#export_button').val()==='Export xl')
-				{
-					$("#"+tId+"_type").attr("value","excel");
-				}
-				else
-				{
-					$("#"+tId+"_type").attr("value","pdf");
-				}
-			}
-			else
-			{
-				ohSnap('Il n\'y a aucune donnée à exporter', {color: 'red'});
-				e.preventDefault();
 			}
 		});
 	};
 })(window, document, jQuery);
+
+
+$(document).on('click', function (e)
+{
+	if($(".datatable_export_showparam").is(e.target)/* && $('.datatable_export_parampagecontent').css('display') === 'none0'*/)
+	{
+		var parampagecontent = $(e.target).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent');
+		
+		if(parampagecontent.css('display') == 'none')
+		{
+			$('.datatable_export_parampagecontent').css('display', 'none');
+			parampagecontent.css('display', 'inline-block');
+		}
+		else
+		{
+			$('.datatable_export_parampagecontent').css('display', 'none');
+		}
+	}
+	else if(!$(".datatable_export_parampagecontent").is(e.target) && $(".datatable_export_parampagecontent").has(e.target).length === 0)
+	{
+		$('.datatable_export_parampagecontent').css('display', 'none');
+	}
+});
+
+$(document).on('click', '.datatable_export_choix', function ()
+{
+	var parampagecontent = $(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent');
+	
+	if($(this).val() == 'xl')
+	{
+		parampagecontent.find('.datatable_export_paramexport_pdf').hide();
+		parampagecontent.find('.datatable_export_paramexport_xl').show();
+	}
+	else
+	{
+		parampagecontent.find('.datatable_export_paramexport_xl').hide();
+		parampagecontent.find('.datatable_export_paramexport_pdf').show();
+	}	
+	
+	$(this).closest('.dataTables_wrapper').find('.datatable_export_button').val('Export ' + $(this).val());
+});
+
+$(document).on('click', '.datatable_export_exportpdf_parametrage', function ()
+{
+	if($(this).val()==="mano")
+	{
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=orientation]').prop('disabled', false);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=type_taille]').prop('disabled', false);
+	}
+	else
+	{
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=orientation][value=L]').prop('checked', true);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=type_taille][value=A4]').prop('checked', true);
+		
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=orientation]').prop('disabled', true);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_paramexport_pdf').find('[name=type_taille]').prop('disabled', true);
+
+	}
+});
+
+
+$(document).on('click', '.datatable_export_button', function (e)
+{
+
+	mydonnee = setup(datatablesSettingsArray[$(e.target).data('forid')]);
+	console.log(mydonnee);
+	
+	if(mydonnee['data'].length > 0)
+	{
+		var title = $('#'+$(e.target).data('forid')).attr('pdf_title');
+		var param = $('#'+$(e.target).data('forid')).attr('pdf_param');
+
+		if (title === 'undefined'){title = '';}
+		if (param === 'undefined'){param = '';}
+		
+		
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=data]').attr("value", mydonnee['data']);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=colonne]').attr("value",mydonnee['header']);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=footer]').attr("value",mydonnee['footer']);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=banned]').attr("value",mydonnee['banned']);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=titre]').attr("value",title);
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=param]').attr("value",param);
+		
+		if($(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent').val()==='xl')
+		{
+			$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=type]').attr("value", "excel");
+		}
+		else
+		{
+			$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=type]').attr("value", "pdf");
+		}
+		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').submit();
+	}
+	else
+	{
+		ohSnap('Il n\'y a aucune donnée à exporter', {color: 'red'});
+	}
+});

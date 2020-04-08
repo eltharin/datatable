@@ -10,12 +10,13 @@ $.fn.dataTable.defaults.ordering = true;
 $.fn.dataTable.defaults.paging = true;
 $.fn.dataTable.defaults.autoWidth = false;
 //$.fn.dataTable.defaults.lengthChange = false;
-$.fn.dataTable.defaults.sDom = "tFipL";
+$.fn.dataTable.defaults.sDom = "FipLt";
+
+$.fn.dataTable.defaults.sDom = "<'datatable_flex'<'datatable_controls'Fpi>L<'datatable_button'>><'dataTables_divtable't>"; 
 $.fn.dataTable.defaults.aaSorting = [];
 $.fn.dataTable.defaults.aoColumnDefs=tableRender;
 $.fn.dataTable.defaults.searchDelay=250;
 $.fn.dataTable.defaults.deferRender=true;
-
 
 
 $(document).ready(  function ()

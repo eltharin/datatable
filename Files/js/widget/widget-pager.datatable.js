@@ -87,7 +87,12 @@
 			cPager.Html.pager.appendTo(nPaging);
 			cPager.Html.IFirst.appendTo(cPager.Html.pager);
 			cPager.Html.IPrevious.appendTo(cPager.Html.pager);
-			cPager.Html.SPages.appendTo(cPager.Html.pager);
+			
+			var divSpages = $('<div></div>');
+			cPager.Html.SPages.appendTo(divSpages);
+			
+			divSpages.appendTo(cPager.Html.pager);
+			
 			cPager.Html.INext.appendTo(cPager.Html.pager);
 			cPager.Html.ILast.appendTo(cPager.Html.pager);
 		},

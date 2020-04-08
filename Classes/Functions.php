@@ -6,11 +6,11 @@ class Functions
 {
 	static function includes()
 	{
-		\Config::get('HTMLTemplate')->addCss('/datatable/css/filter.datatable.css');
+		//\Config::get('HTMLTemplate')->addCss('/datatable/css/filter.datatable.css');
 		\Config::get('HTMLTemplate')->addCss('/datatable/css/datatable.css');
-		\Config::get('HTMLTemplate')->addCss('/datatable/css/pager.datatable.css');
-		\Config::get('HTMLTemplate')->addCss('/datatable/css/menuLength.datatable.css');
-		\Config::get('HTMLTemplate')->addCss('/datatable/css/output.datatable.css');
+		//\Config::get('HTMLTemplate')->addCss('/datatable/css/pager.datatable.css');
+		//\Config::get('HTMLTemplate')->addCss('/datatable/css/menuLength.datatable.css');
+		//\Config::get('HTMLTemplate')->addCss('/datatable/css/output.datatable.css');
 		
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/core/jquery.dataTables.js'); 
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/renderers.datatable.js');
