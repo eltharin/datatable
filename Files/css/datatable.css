@@ -6,7 +6,6 @@
 
 .dataTables_wrapper > .dataTables_divtable
 {
-	overflow-y:auto;
 	width:100%;
 	display: block;
 }
@@ -181,7 +180,7 @@
 {
 	height: 26px;
 	top: 0px;
-	
+	padding:5px;
 	border: 1px solid gray;
 	border-radius: 5px;
 }
