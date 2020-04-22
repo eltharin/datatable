@@ -19,6 +19,7 @@ class Functions
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-pager.datatable.js'); 
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-menuLength.datatable.js'); 
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-json.datatable.js'); 
+		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-form.datatable.js'); 
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-filter.datatable.js'); 
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-totalizer.datatable.js');
 		\Config::get('HTMLTemplate')->addScript('/datatable/js/widget/widget-numColFooter.datatable.js');
