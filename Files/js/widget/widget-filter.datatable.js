@@ -44,7 +44,7 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 					var myth = $('<th idx="'+i+'" class="'+oClasse.thClasse+'"></th>').appendTo(trFilter);
 					
 					th.push(myth);
-					var select = $('<select class="'+oClasse.sFilter+' select_parametre"></select>');
+					var select = $('<select class="'+oClasse.sFilter+'" data-container=".dataTables_divtable"></select>');
 					settings.zfilter.selects[i] = select;
 					
 					select.appendTo(myth).on( 'change', function () {
