@@ -481,7 +481,6 @@ $(document).on('click', '.datatable_export_button', function (e)
 {
 
 	mydonnee = setup(datatablesSettingsArray[$(e.target).data('forid')]);
-	console.log(mydonnee);
 	
 	if(mydonnee['data'].length > 0)
 	{
@@ -499,7 +498,7 @@ $(document).on('click', '.datatable_export_button', function (e)
 		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=titre]').attr("value",title);
 		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=param]').attr("value",param);
 		
-		if($(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent').val()==='xl')
+		if($(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent').find('input[name=type_exp]').val() === 'XL')
 		{
 			$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=type]').attr("value", "excel");
 		}
