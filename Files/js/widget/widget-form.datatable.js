@@ -1,19 +1,22 @@
 $(document).ready(function(){
 	$('.dt-form').on('submit',function(){
-
-		var thisform = $(this);
+		
+		$(this).children('.inputContainer').remove();
+		
+		var thisform = $(this).append('<div class="inputContainer"></div>');
+				
 		$('#'+thisform.data('tableid')).DataTable().$('input, select').each(function(index, data)
 		{
 			if($(data).prop('type') === 'checkbox')
 			{
 				if($(data).prop('checked'))
 				{
-					thisform.prepend('<input type="hidden" value="'+$(data).val()+'" name="'+$(data).attr('name')+'">');
+					thisform.children('.inputContainer').append('<input type="hidden" value="'+$(data).val()+'" name="'+$(data).attr('name')+'">');
 				}
 			}
 			else
 			{
-				thisform.prepend('<input type="hidden" value="'+$(data).val()+'" name="'+$(data).attr('name')+'">');
+				thisform.children('.inputContainer').append('<input type="hidden" value="'+$(data).val()+'" name="'+$(data).attr('name')+'">');
 			}
 		});
 	});
