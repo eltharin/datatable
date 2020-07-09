@@ -156,6 +156,8 @@
     margin-left: -8%;
     border: 2px solid black;
     display: none;
+	
+	z-index:2;
 }
 
 .dataTables_wrapper hr

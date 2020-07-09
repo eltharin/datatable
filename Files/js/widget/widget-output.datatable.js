@@ -444,7 +444,7 @@ $(document).on('click', '.datatable_export_choix', function ()
 {
 	var parampagecontent = $(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent');
 	
-	if($(this).val() == 'xl')
+	if($(this).val() == 'XL')
 	{
 		parampagecontent.find('.datatable_export_paramexport_pdf').hide();
 		parampagecontent.find('.datatable_export_paramexport_xl').show();
@@ -498,7 +498,7 @@ $(document).on('click', '.datatable_export_button', function (e)
 		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=titre]').attr("value",title);
 		$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=param]').attr("value",param);
 		
-		if($(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent').find('input[name=type_exp]').val() === 'XL')
+		if($(this).closest('.dataTables_wrapper').find('.datatable_export_parampagecontent').find('input[name=type_exp]:checked').val() === 'XL')
 		{
 			$(this).closest('.dataTables_wrapper').find('.datatable_export_form_output').find('input[name=type]').attr("value", "excel");
 		}

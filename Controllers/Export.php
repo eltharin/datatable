@@ -17,7 +17,7 @@ class Export extends \Core\App\Mvc\Controller
 		$data = $this->get_data($_POST['data']);
 		$titre = $_POST['titre'];
 		$param = $_POST['param'];
-		$type = $_POST['type'];
+		$type = $_POST['type_exp'];
 		$valeurs = $_POST['valeurs'];
 		
 		$banned = $_POST['banned']!=''?explode(",", $_POST['banned']):[];
@@ -30,7 +30,7 @@ class Export extends \Core\App\Mvc\Controller
 		$footer = $this->getColonnesFictives($footer);
 		$colonne = $this->format_header($colonne,$footer, $banned);
 
-		if ($type == "excel")
+		if ($type == "XL")
 		{
 			$this->xl($colonne, $data, $titre, $param, $valeurs);
 		}
