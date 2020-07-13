@@ -255,17 +255,17 @@
 								
 								if(settings.aoColumns[i].mRender !== null)
 								{
-									if(settings.aoColumns[i].mRender.export !== undefined)
+									if(typeof settings.aoColumns[i].mRender == 'function' )
+									{
+										data = settings.aoColumns[i].mRender(data,'export',$rows[rowIndex]._aData);
+									}
+									else if(settings.aoColumns[i].mRender.export !== undefined)
 									{
 										data = settings.aoColumns[i].mRender.export(data,'export',$rows[rowIndex]._aData);
 									}
 									else if(settings.aoColumns[i].mRender.display !== undefined)
 									{
 										data = settings.aoColumns[i].mRender.display(data,'display',$rows[rowIndex]._aData);
-									}
-									else
-									{
-										data = settings.aoColumns[i].mRender(data,'display',$rows[rowIndex]._aData);	
 									}
 								}
 								mydata += '"' + data.toString().replace( /<([^>]*)>/g, "" )
@@ -304,7 +304,11 @@
 
                         if (settings.aoColumns[i].mRender !== null) 
 						{
-							if(settings.aoColumns[i].mRender.export !== undefined)
+							if(typeof settings.aoColumns[i].mRender == 'function' )
+							{
+								data = settings.aoColumns[i].mRender(data,'export',$rows[rowIndex]._aData);
+							}
+							else if(settings.aoColumns[i].mRender.export !== undefined)
 							{
 								data = settings.aoColumns[i].mRender.export(data);
 							}

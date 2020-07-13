@@ -45,6 +45,11 @@ class Maker
 			$qb->select($v . ' "' . $k . '"');
 		}*/
 
+		foreach($params['order'] as $o)
+		{
+			$qb->order($cols[$o['column']] . ' ' . $o['dir']);
+		}
+
 		$qb->fetchMode(\PDO::FETCH_NUM)->setCallback(null);
 
 		$qb->offset($params['start']);

@@ -180,14 +180,13 @@ $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
 
 function getAjaxDataForBigTable(oSettings,url,params)
 {
+
 	$.post( url,params, function( data ) {
 		try
 		{
 			if (data != '')
 			{
 				data = $.parseJSON(data);
-
-				//console.log(data);
 
 				$.each(data.data,function (i,v){
 					oSettings.oApi._fnAddData(oSettings,v);
@@ -197,9 +196,11 @@ function getAjaxDataForBigTable(oSettings,url,params)
 				oSettings.oApi._fnReDraw(oSettings,true);
 
 
-				if (data.next == 'plus')
+				if (data.more == 'yes')
 				{
-					getAjaxDataForBigTable(oSettings,url,{transactionuuid:data.uuid});
+					//$.wait(1).then(function(){
+						getAjaxDataForBigTable(oSettings,url,{uuid:data.uuid});
+					//});
 				}
 				else
 				{
