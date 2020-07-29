@@ -169,7 +169,50 @@ $.fn.dataTableExt.oApi.fnLoadJSON = function ( oSettings,data)
 	{
 		oSettings.zfilter.create_filters(oSettings);
 	}
+	/*
+	console.log('100 lignes chargées');
+
+
+		if(arguments.length > 2)
+		{
+			for(i = 2; i <arguments.length; i++)
+			{
+				for (var data in arguments[i])
+				{
+					oSettings.oApi._fnAddData( oSettings, data );
+				}
+				oSettings.oApi._fnReDraw(oSettings,true);
+
+				if(oSettings.zfilter !== undefined)
+				{
+					oSettings.zfilter.create_filters(oSettings);
+				}
+				console.log((i*100) + ' lignes chargées');
+			}
+		}*/
 };
+/*
+$.fn.dataTableExt.oApi.fnAddJSON = function ( oSettings,data)
+{
+	if(jQuery.type( data ) === "string")
+	{
+		try
+		{
+			data = $.parseJSON(data);
+		}
+		catch(err)
+		{
+			console.log(err);
+		}
+	}
+	oSettings.oApi._fnAjaxUpdateDraw(oSettings,{data:data});
+	oSettings.oApi._fnReDraw(oSettings,true);
+
+	if(oSettings.zfilter !== undefined)
+	{
+		oSettings.zfilter.create_filters(oSettings);
+	}
+};*/
 
 $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
 {
