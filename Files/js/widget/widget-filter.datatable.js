@@ -64,6 +64,18 @@ $.fn.dataTable.ext.filter = function ( settings ) {
 						settings.zfilter.cols[i] = th[i].data('filter');
 						settings.oApi._fnReDraw(settings);
 					}
+					
+					if(settings.zfilter.multiselect)
+					{
+						select.attr('multiple','multiple');
+						select.val('');
+						select.multipleSelect({
+							selectAll: true,
+							width: '100%',
+							filter:true,
+							dropWidth: 'auto'
+						});
+					}
 				}
 				else
 				{

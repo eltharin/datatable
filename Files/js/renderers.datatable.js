@@ -114,11 +114,10 @@ jQuery.fn.dataTable.render["integer"] = function() {
 
 
 jQuery.fn.dataTable.render["html"] = function() {
-	return function ( data, type, row ) 
-	{
+	return function ( data, type, row ) {
 		if(type != 'display')
 		{
-			return data.replace( /<.*(title=\"([^\"]*)\").*?>/g, "$2" ).replace( /<.*(title=\'([^\']*)\').*?>/g, "$2" ).replace( /<.*?>/g, "" );
+			return data.replace( /<.*(title=\"([^\"]*)\").*?>/g, "$2" ).replace( /<.*(title=\'([^\']*)\').*?>/g, "$2" ).replace( /<.*?>/g, "" ).toLowerCase();
 		}
 		return data;
 	};

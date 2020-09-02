@@ -169,50 +169,7 @@ $.fn.dataTableExt.oApi.fnLoadJSON = function ( oSettings,data)
 	{
 		oSettings.zfilter.create_filters(oSettings);
 	}
-	/*
-	console.log('100 lignes chargées');
-
-
-		if(arguments.length > 2)
-		{
-			for(i = 2; i <arguments.length; i++)
-			{
-				for (var data in arguments[i])
-				{
-					oSettings.oApi._fnAddData( oSettings, data );
-				}
-				oSettings.oApi._fnReDraw(oSettings,true);
-
-				if(oSettings.zfilter !== undefined)
-				{
-					oSettings.zfilter.create_filters(oSettings);
-				}
-				console.log((i*100) + ' lignes chargées');
-			}
-		}*/
 };
-/*
-$.fn.dataTableExt.oApi.fnAddJSON = function ( oSettings,data)
-{
-	if(jQuery.type( data ) === "string")
-	{
-		try
-		{
-			data = $.parseJSON(data);
-		}
-		catch(err)
-		{
-			console.log(err);
-		}
-	}
-	oSettings.oApi._fnAjaxUpdateDraw(oSettings,{data:data});
-	oSettings.oApi._fnReDraw(oSettings,true);
-
-	if(oSettings.zfilter !== undefined)
-	{
-		oSettings.zfilter.create_filters(oSettings);
-	}
-};*/
 
 $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
 {
@@ -223,13 +180,14 @@ $.fn.dataTableExt.oApi.fnLoadBigTableFromURL = function ( oSettings,url)
 
 function getAjaxDataForBigTable(oSettings,url,params)
 {
-
 	$.post( url,params, function( data ) {
 		try
 		{
 			if (data != '')
 			{
 				data = $.parseJSON(data);
+
+				//console.log(data);
 
 				$.each(data.data,function (i,v){
 					oSettings.oApi._fnAddData(oSettings,v);
@@ -239,11 +197,9 @@ function getAjaxDataForBigTable(oSettings,url,params)
 				oSettings.oApi._fnReDraw(oSettings,true);
 
 
-				if (data.more == 'yes')
+				if (data.next == 'plus')
 				{
-					//$.wait(1).then(function(){
-						getAjaxDataForBigTable(oSettings,url,{uuid:data.uuid});
-					//});
+					getAjaxDataForBigTable(oSettings,url,{transactionuuid:data.uuid});
 				}
 				else
 				{
