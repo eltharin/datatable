@@ -131,12 +131,18 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort,
 	}
 });
 
-$.fn.dataTableExt.ofnSearch['date'] = function ( date ) {
-return date.replace( /<.*?>/g, "" );
+$.fn.dataTableExt.ofnSearch['date'] = function ( date )
+{
+	if (date == null)
+	{
+		date = '';
+	}
+	return date.replace( /<.*?>/g, "" );
 };
 
-$.fn.dataTableExt.ofnSearch['favoris'] = function ( date ) {
-return date.replace( /<([^>]*)title="([^"]*)"([^>]*)>/g, "$2" ).replace( /<([^>]*)>/g, "" );
+$.fn.dataTableExt.ofnSearch['favoris'] = function ( date )
+{
+	return date.replace( /<([^>]*)title="([^"]*)"([^>]*)>/g, "$2" ).replace( /<([^>]*)>/g, "" );
 };
 
 
