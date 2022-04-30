@@ -219,13 +219,13 @@
 	border-width: 0 1px 1px 0;
 }
 
-.dataTable > thead > tr > th.sorting_asc{
+.dataTable > thead > tr > th.sorting.sorting_asc{
 	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
 	padding: 4px 0px 10px 0px;
 	background-position: bottom center;
 }
 
-.dataTable > thead > tr > th.sorting_desc{
+.dataTable > thead > tr > th.sorting.sorting_desc{
 	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
 	padding: 4px 0px 10px 0px;
 	background-position: bottom center;

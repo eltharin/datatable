@@ -9,7 +9,7 @@ $.fn.dataTable.defaults.bInfo = true;
 $.fn.dataTable.defaults.ordering = true;
 $.fn.dataTable.defaults.paging = true;
 $.fn.dataTable.defaults.autoWidth = false;
-//$.fn.dataTable.defaults.lengthChange = false;
+$.fn.dataTable.defaults.lengthChange = false;
 $.fn.dataTable.defaults.sDom = "FipLt";
 
 $.fn.dataTable.defaults.sDom = "<'datatable_flex'<'datatable_controls'Fpi>L<'datatable_button'>><'dataTables_divtable't>"; 
@@ -21,7 +21,6 @@ $.fn.dataTable.defaults.deferRender=true;
 
 $(document).ready(  function ()
 {
-    $('.datatableauto').dataTable();
     $('table.dt').dataTable();
 });
 
@@ -29,6 +28,7 @@ $(document).ready(  function ()
 $(document).on( 'preInit.dt', function (e, oSettings) 
 {
 	datatableSettings = oSettings;
+//    console.log("preInit");
 	if(!$(oSettings.nTable).hasClass('dt-pager') && !$(oSettings.nTable).hasClass('dt-ofp') && !$(oSettings.nTable).hasClass('dt-fp'))
 	{
 		$('#'+oSettings.sTableId+'_info').remove();
@@ -58,23 +58,27 @@ $(document).on( 'preInit.dt', function (e, oSettings)
 	{
 		new $.fn.dataTable.ext.numColFooter(oSettings);
 	}
-});	
+});
 
 $(document).off('plugin-init.dt').on( 'plugin-init.dt', function (e, oSettings) 
 {
+    //console.log("plugin");
 	if($(oSettings.nTable).hasClass('dt-output') || $(oSettings.nTable).hasClass('dt-ofp'))
 	{
 		new $.fn.dataTable.ext.output(oSettings);
 	}
 });
 
+
 $(document).on( 'draw.dt', function (e, oSettings) 
 {
+    //console.log("draw");
 	if($(oSettings.nTable).hasClass('dt-totalizer'))
 	{
 		new $.fn.dataTable.ext.totalizer(oSettings);
 	}
 });
+
 
 jQuery.extend( jQuery.fn.dataTableExt.type.search, {
 		date: function ( data ) 
@@ -83,6 +87,8 @@ jQuery.extend( jQuery.fn.dataTableExt.type.search, {
 					   .replace( /<([^>]*)>/g, "" );
 		}
 	} );
+
+
 
 jQuery.extend( jQuery.fn.dataTableExt.oSort, 
 {
@@ -140,13 +146,8 @@ $.fn.dataTableExt.ofnSearch['date'] = function ( date )
 	return date.replace( /<.*?>/g, "" );
 };
 
-$.fn.dataTableExt.ofnSearch['favoris'] = function ( date )
-{
-	return date.replace( /<([^>]*)title="([^"]*)"([^>]*)>/g, "$2" ).replace( /<([^>]*)>/g, "" );
-};
+//--- Datatable new functions
 
-
-//--- Datatable new functions 
 $.fn.dataTableExt.oApi.fnLoadHTML = function ( oSettings,data)
 {
 	oSettings.oApi._fnClearTable(oSettings);
