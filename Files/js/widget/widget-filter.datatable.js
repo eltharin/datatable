@@ -79,7 +79,7 @@
                             });
                         }
 
-                        if(settings.oLoadedState.columns[i] != undefined && settings.oLoadedState.columns[i].zfilter != undefined)
+                        if(settings.oLoadedState != undefined && settings.oLoadedState != null && settings.oLoadedState.columns[i] !== undefined && settings.oLoadedState.columns[i].zfilter != undefined)
                         {
                             settings.oLoadedState.columns[i].zfilter.forEach(function (a,b) {
                                 select.multipleSelect('check',a);
